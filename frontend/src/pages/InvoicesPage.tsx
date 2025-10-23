@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Plus, Eye, Calendar, Search } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -13,15 +13,7 @@ const InvoicesPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [dateFilter, setDateFilter] = useState<string>('all');
 
-  useEffect(() => {
-    fetchInvoices();
-  }, []);
-
-  useEffect(() => {
-    filterInvoices();
-  }, [invoices, searchTerm, dateFilter]);
-
-  const fetchInvoices = async () => {
+  const fetchInvoices = useCallback(async () => {
     try {
       setLoading(true);
       const response = await invoicesApi.getAll();
@@ -31,9 +23,9 @@ const InvoicesPage: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const filterInvoices = () => {
+  const filterInvoices = useCallback(() => {
     let filtered = invoices;
 
     // Search filter
@@ -70,7 +62,15 @@ const InvoicesPage: React.FC = () => {
     }
 
     setFilteredInvoices(filtered);
-  };
+  }, [invoices, searchTerm, dateFilter]);
+
+  useEffect(() => {
+    fetchInvoices();
+  }, [fetchInvoices]);
+
+  useEffect(() => {
+    filterInvoices();
+  }, [filterInvoices]);
 
   const getTotalRevenue = () => {
     return filteredInvoices.reduce((sum, invoice) => sum + invoice.grand_total, 0);

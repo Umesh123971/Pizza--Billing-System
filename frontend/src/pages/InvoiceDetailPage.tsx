@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Calendar, Package, Printer } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -11,13 +11,7 @@ const InvoiceDetailPage: React.FC = () => {
   const [invoice, setInvoice] = useState<Invoice | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (id) {
-      fetchInvoice(parseInt(id));
-    }
-  }, [id]);
-
-  const fetchInvoice = async (invoiceId: number) => {
+  const fetchInvoice = useCallback(async (invoiceId: number) => {
     try {
       setLoading(true);
       const response = await invoicesApi.getById(invoiceId);
@@ -28,7 +22,13 @@ const InvoiceDetailPage: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [navigate]);
+
+  useEffect(() => {
+    if (id) {
+      fetchInvoice(parseInt(id));
+    }
+  }, [id, fetchInvoice]);
 
   const handlePrint = () => {
     window.print();
