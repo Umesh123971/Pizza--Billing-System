@@ -1,0 +1,33 @@
+﻿# npm cache
+.npm-cache/
+*/.npm-cache/
+**/.npm-cache/
+
+# Dependencies
+node_modules/
+*/node_modules/
+
+# Build
+frontend/build/
+backend/dist/
+*.exe
+main
+
+# Environment
+.env
+.env.local
+.env.production
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Problematic files
+frontend/# Code Citations.md

@@ -1,21 +1,17 @@
-# Dependencies
+﻿# Dependencies
 node_modules/
-/.pnp
-.pnp.js
-
-# Testing
-/coverage
+.npm-cache/
 
 # Production
-/build
+build/
+
+# Testing
+coverage/
 
 # Misc
 .DS_Store
-.env
 .env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env.production
 
 # Logs
 npm-debug.log*
@@ -23,19 +19,8 @@ yarn-debug.log*
 yarn-error.log*
 
 # IDE
-.idea/
 .vscode/
-*.swp
-*.swo
+.idea/
 
-# npm cache
-.npm-cache/
-
-# Optional npm cache directory
-.npm
-
-# Optional eslint cache
+# Optional
 .eslintcache
-
-# Optional REPL history
-.node_repl_history

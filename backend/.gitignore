@@ -1,23 +1,17 @@
-# Binaries for programs and plugins
+﻿# Binaries
 *.exe
-*.exe~
+main
 *.dll
 *.so
 *.dylib
 
-# Test binary, built with `go test -c`
+# Test binary
 *.test
 
-# Output of the go coverage tool
+# Output
 *.out
 
-# Dependency directories
-vendor/
-
-# Go workspace file
-go.work
-
-# Environment variables
+# Environment
 .env
 .env.local
 .env.*.local
@@ -27,7 +21,6 @@ go.work
 .vscode/
 *.swp
 *.swo
-*~
 
 # OS
 .DS_Store
@@ -37,6 +30,8 @@ Thumbs.db
 *.log
 logs/
 
-# Temporary files
-tmp/
-temp/
+# Cache
+.npm-cache/
+
+# Vendor
+vendor/
