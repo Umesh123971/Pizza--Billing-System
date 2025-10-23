@@ -1,5 +1,34 @@
 ﻿services:
-  # Frontend Static Site
+  # Backend Service (Go + Gin)
+  - type: web
+    name: pizza-billing-backend
+    env: go
+    region: oregon
+    plan: free
+    branch: main
+    rootDir: backend
+    buildCommand: go mod download && go build -o main cmd/server/main.go
+    startCommand: ./main
+    healthCheckPath: /health
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: GIN_MODE
+        value: release
+      - key: DB_HOST
+        sync: false
+      - key: DB_PORT
+        sync: false
+      - key: DB_NAME
+        sync: false
+      - key: DB_USER
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: FRONTEND_URL
+        value: https://pizza-billing-frontend.onrender.com
+
+  # Frontend Service (React)
   - type: web
     name: pizza-billing-frontend
     env: static
@@ -9,7 +38,8 @@
     rootDir: frontend
     buildCommand: npm install && npm run build
     staticPublishPath: ./build
-    headers: - path: /*
+    headers:
+      - path: /*
         name: X-Frame-Options
         value: DENY
       - path: /*
