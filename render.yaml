@@ -26,7 +26,6 @@
   - type: web
     name: pizza-billing-frontend
     env: static
-    plan: free
     branch: main
     rootDir: frontend
     buildCommand: npm install && npm run build
