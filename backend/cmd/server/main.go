@@ -3,11 +3,10 @@ package main
 import (
 	"backend/models"
 	"backend/routes"
-	"backend/seed" // ← ADD THIS IMPORT
+	"backend/seed"
 	"log"
 	"os"
 
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
@@ -18,26 +17,16 @@ func main() {
 		log.Println("Warning: No .env file found")
 	}
 
-	// Connect to database
-	models.ConnectDatabase()
-	models.MigrateDB()
+	// Initialize database connection
+	models.InitDB()
 
-	// Uncomment to seed data (only run once)
-	seed.SeedData() // ← UNCOMMENT THIS LINE
+	// Seed initial data (run once or check if data already exists)
+	seed.SeedData()
 
 	// Initialize Gin router
 	r := gin.Default()
 
-	// CORS configuration
-	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:3000"},
-		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
-		ExposeHeaders:    []string{"Content-Length"},
-		AllowCredentials: true,
-	}))
-
-	// Setup routes
+	// Setup routes (includes CORS configuration)
 	routes.SetupRoutes(r)
 
 	// Get port from environment or use default
