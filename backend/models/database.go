@@ -1,43 +1,22 @@
-package models
+// Add this function to handle DATABASE_URL from Render
+func getDSN() string {
+	// Check if DATABASE_URL is set (Render provides this)
+	if dbURL := os.Getenv("DATABASE_URL"); dbURL != "" {
+		return dbURL
+	}
 
-import (
-    "fmt"
-    "log"
-    "os"
+	// Fall back to individual environment variables (local development)
+	host := os.Getenv("DB_HOST")
+	user := os.Getenv("DB_USER")
+	password := os.Getenv("DB_PASSWORD")
+	dbname := os.Getenv("DB_NAME")
+	port := os.Getenv("DB_PORT")
 
-    "gorm.io/driver/postgres"
-    "gorm.io/gorm"
-)
-
-var DB *gorm.DB
-
-// ConnectDatabase establishes connection to PostgreSQL
-func ConnectDatabase() {
-    host := os.Getenv("DB_HOST")
-    user := os.Getenv("DB_USER")
-    password := os.Getenv("DB_PASSWORD")
-    dbname := os.Getenv("DB_NAME")
-    port := os.Getenv("DB_PORT")
-
-    dsn := fmt.Sprintf(
-        "host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=UTC",
-        host, user, password, dbname, port,
-    )
-
-    database, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-    if err != nil {
-        log.Fatal("Failed to connect to database:", err)
-    }
-
-    DB = database
-    log.Println("✓ Database connected successfully")
+	return fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
+		host, user, password, dbname, port)
 }
 
-// MigrateDB runs automatic migrations
-func MigrateDB() {
-    err := DB.AutoMigrate(&Item{}, &Invoice{}, &InvoiceItem{})
-    if err != nil {
-        log.Fatal("Failed to migrate database:", err)
-    }
-    log.Println("✓ Database migration completed")
+func InitDB() {
+	dsn := getDSN()
+	// ...existing code...
 }
