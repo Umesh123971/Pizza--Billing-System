@@ -1,4 +1,17 @@
-// Add this function to handle DATABASE_URL from Render
+package models
+
+import (
+	"fmt"
+	"log"
+	"os"
+
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
+)
+
+var DB *gorm.DB
+
+// getDSN handles DATABASE_URL from Render or individual variables for local development
 func getDSN() string {
 	// Check if DATABASE_URL is set (Render provides this)
 	if dbURL := os.Getenv("DATABASE_URL"); dbURL != "" {
@@ -16,7 +29,21 @@ func getDSN() string {
 		host, user, password, dbname, port)
 }
 
+// InitDB initializes the database connection
 func InitDB() {
 	dsn := getDSN()
-	// ...existing code...
+
+	var err error
+	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	if err != nil {
+		log.Fatal("Failed to connect to database:", err)
+	}
+
+	// Auto migrate the schema
+	err = DB.AutoMigrate(&Item{}, &Invoice{}, &InvoiceItem{})
+	if err != nil {
+		log.Fatal("Failed to migrate database:", err)
+	}
+
+	log.Println("Database connected and migrated successfully")
 }
